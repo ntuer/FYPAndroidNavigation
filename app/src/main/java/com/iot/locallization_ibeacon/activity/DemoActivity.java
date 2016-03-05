@@ -461,7 +461,7 @@ public class DemoActivity extends Activity {
     public float[] AvgDegree = new float[length];
 
     public float LastDegree =0;
-    public void setDegree(float degree){
+    public void setDegree(float degree){//return the average of 10 degrees
         AvgDegree[pos] = degree;
         pos = (pos + 1)%length;
         float sum = 0;

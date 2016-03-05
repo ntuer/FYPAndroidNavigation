@@ -51,7 +51,7 @@ public class Navigation {
     private List<Beacon> best ;
     private int shortestLenth ;
 
-    public void  findSameFloorPath(int cost,Beacon startBeacon,Beacon endBeacon){//postorder DFS
+    public void  findSameFloorPath(int cost,Beacon startBeacon,Beacon endBeacon){//preorder DFS
 
 
         cost++;

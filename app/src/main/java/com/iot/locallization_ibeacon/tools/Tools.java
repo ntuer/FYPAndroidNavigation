@@ -84,7 +84,7 @@ public class Tools extends  Activity {
         return provider1.equals(provider2);
     }
 
-    public static void ReadConfigFile(Context context) {
+    public static void ReadConfigFile(Context context) {//read beacons from the BLEdevice.db file, put markers at each position and store all beacons info into GlobalData.beaconlist
         DatabaseContext dbContext = new DatabaseContext(context);
         SQLiteHelper helper = new SQLiteHelper(dbContext,"BLEdevice.db");//create a SQLiteHelper object, create deviceTable and edgeTable
         List<Beacon> beacons = helper.selectAllBeacon();//return a list of beacons from the database

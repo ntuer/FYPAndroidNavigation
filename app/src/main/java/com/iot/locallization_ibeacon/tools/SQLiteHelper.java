@@ -37,8 +37,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        this.createDeviceTable(sqLiteDatabase);
-        this.createEdgeTable(sqLiteDatabase);
+        //this.createDeviceTable(sqLiteDatabase);
+        //this.createEdgeTable(sqLiteDatabase);
     }
 
     public void createDeviceTable(SQLiteDatabase sqLiteDatabase){
@@ -138,6 +138,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
 
+    //modify the beacon class and how to store data into it
     public List<Beacon> selectAllBeacon(){
         List<Beacon> beacons = new ArrayList<Beacon>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();

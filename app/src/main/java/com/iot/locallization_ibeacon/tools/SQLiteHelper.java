@@ -47,12 +47,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "major  varchar(20)," +
                 "minor  varchar(20)," +
                 "uuid   varchar(20)," +
+                "rssi   varchar(20)," +
                 "lat    varchar(20)," +
                 "lng    varchar(20)," +
+                "building   varchar(20)," +
                 "floor  varchar(20)," +
-                "rssi   varchar(20)," +
                 "type   varchar(20)," +
-                "pipeNum   varchar(20))");
+                "pipeNum   varchar(20)," +
+                "x   varchar(20)," +
+                "y   varchar(20))");
         List<Beacon> beacons = Tools.ReadConfigFile2();//return a list of beacons based on sensorInfo.txt
         for (Beacon beacon: beacons) {//write the info from the sensorInfo.txt to the deviceTable
             ContentValues values = new ContentValues();
@@ -60,12 +63,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             values.put("major",beacon.major);
             values.put("minor",beacon.minor);
             values.put("uuid","74278BDA-B644-4520-8F0C-720EAF059935");
+            values.put("rssi",beacon.max_rssi);
             values.put("lat",beacon.position.latitude);
             values.put("lng",beacon.position.longitude);
+            values.put("building",beacon.building);
             values.put("floor",beacon.floor);
-            values.put("rssi",beacon.max_rssi);
-            values.put("type","0");
-            values.put("pipeNum","0");
+            values.put("type", beacon.type + "");
+            values.put("pipeNum", beacon.pipeNum + "");
+            values.put("x", beacon.x + "");
+            values.put("y", beacon.y + "");
             sqLiteDatabase.insert("device",null,values);
         }
     }
@@ -78,12 +84,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("major",beacon.major);
         values.put("minor",beacon.minor);
         values.put("uuid","74278BDA-B644-4520-8F0C-720EAF059935");
+        values.put("rssi",beacon.max_rssi);
         values.put("lat",beacon.position.latitude);
         values.put("lng",beacon.position.longitude);
+        values.put("building",beacon.building);
         values.put("floor",beacon.floor);
-        values.put("rssi",beacon.max_rssi);
         values.put("type", beacon.type + "");
         values.put("pipeNum", beacon.pipeNum + "");
+        values.put("x", beacon.x + "");
+        values.put("y", beacon.y + "");
         sqLiteDatabase.insert("device", null, values);
     }
 
@@ -102,12 +111,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("major",beacon.major);
         values.put("minor",beacon.minor);
         values.put("uuid","74278BDA-B644-4520-8F0C-720EAF059935");
+        values.put("rssi",beacon.max_rssi);
         values.put("lat",beacon.position.latitude);
         values.put("lng",beacon.position.longitude);
-        values.put("floor", beacon.floor);
-        values.put("rssi", beacon.max_rssi);
+        values.put("building",beacon.building);
+        values.put("floor",beacon.floor);
         values.put("type", beacon.type + "");
         values.put("pipeNum", beacon.pipeNum + "");
+        values.put("x", beacon.x + "");
+        values.put("y", beacon.y + "");
         String[] args = {beacon.ID};
 
         sqLiteDatabase.update("device", values, "id=?", args);
@@ -122,18 +134,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             Beacon beacon = new Beacon();
             beacon.ID = cursor.getString(0);
             beacon.major = cursor.getString(1);
-            beacon.minor  =cursor.getString(2);
+            beacon.minor = cursor.getString(2);
             beacon.UUID  = cursor.getString(3);
-            beacon.position = new LatLng(Double.parseDouble(cursor.getString(4)),
-                                        Double.parseDouble(cursor.getString(5)));
-            beacon.floor= Integer.parseInt(cursor.getString(6));
-            beacon.max_rssi  = Integer.parseInt(cursor.getString(7));
-            beacon.type  = Integer.parseInt(cursor.getString(8));
-            beacon.pipeNum  = Integer.parseInt(cursor.getString(9));
+            beacon.max_rssi  = Integer.parseInt(cursor.getString(4));
+            beacon.position = new LatLng(Double.parseDouble(cursor.getString(5))
+                    ,Double.parseDouble(cursor.getString(6)));
+            beacon.building = cursor.getString(7);
+            beacon.floor= Integer.parseInt(cursor.getString(8));
+            beacon.type  = Integer.parseInt(cursor.getString(9));
+            beacon.pipeNum  = Integer.parseInt(cursor.getString(10));
+            beacon.x = Float.parseFloat(cursor.getString(11));
+            beacon.y = Float.parseFloat(cursor.getString(12));
 
             Log.e("findByID",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "
                     +cursor.getString(3)+" "+cursor.getString(4)+" "+cursor.getString(5)+" "
-                    +cursor.getString(6) + " " +cursor.getString(7) + " " +cursor.getString(8)+ " " +cursor.getString(9));
+                    +cursor.getString(6) + " " +cursor.getString(7) + " " +cursor.getString(8)+ " " +cursor.getString(9)
+                    + " " +cursor.getString(10) + " " +cursor.getString(11)+ " " +cursor.getString(12));
         }
 
     }
@@ -149,16 +165,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             beacon.major = cursor.getString(1);
             beacon.minor = cursor.getString(2);
             beacon.UUID  = cursor.getString(3);
-            beacon.position = new LatLng(Double.parseDouble(cursor.getString(4))
-                                        ,Double.parseDouble(cursor.getString(5)));
-            beacon.floor= Integer.parseInt(cursor.getString(6));
-            beacon.max_rssi  = Integer.parseInt(cursor.getString(7));
-            beacon.type  = Integer.parseInt(cursor.getString(8));
-            beacon.pipeNum  = Integer.parseInt(cursor.getString(9));
+            beacon.max_rssi  = Integer.parseInt(cursor.getString(4));
+            beacon.position = new LatLng(Double.parseDouble(cursor.getString(5))
+                                        ,Double.parseDouble(cursor.getString(6)));
+            beacon.building = cursor.getString(7);
+            beacon.floor= Integer.parseInt(cursor.getString(8));
+            beacon.type  = Integer.parseInt(cursor.getString(9));
+            beacon.pipeNum  = Integer.parseInt(cursor.getString(10));
+            beacon.x = Float.parseFloat(cursor.getString(11));
+            beacon.y = Float.parseFloat(cursor.getString(12));
             beacons.add(beacon);
-           /* Log.e("SQLiteHelper",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "
+            Log.e("SQLiteHelper",cursor.getString(0)+" "+cursor.getString(1)+" "+cursor.getString(2)+" "
                     +cursor.getString(3)+" "+cursor.getString(4)+" "+cursor.getString(5)+" "
-                    +cursor.getString(6) + " " +cursor.getString(7) + " " +cursor.getString(8));*/
+                    +cursor.getString(6) + " " +cursor.getString(7) + " " +cursor.getString(8)
+                    +cursor.getString(9) + " " +cursor.getString(10) + " " +cursor.getString(11) + " " + cursor.getString(12));
         }
 
         return beacons;

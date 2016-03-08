@@ -109,6 +109,7 @@ public class DemoActivity extends Activity {
         destionList.add(d6);
 
         destinaton = destionList.get(0);
+
         List<String> dataList = new ArrayList<String>();
         for (int i = 0 ; i < destionList.size() ; i++){
             dataList.add(destionList.get(i).name);
@@ -139,8 +140,9 @@ public class DemoActivity extends Activity {
                 }
 
                 isNavigation = !isNavigation;
-                //Navigation nv = new Navigation();
-                //nv.startFindPath(GlobalData.beaconlist.get("146"), destinaton.postion);
+                Log.e("navigation", "start navigation");
+                //Navigation nv = new Navigation(GlobalData.beaconlist.get("141"), GlobalData.beaconlist.get("148"));
+                //nv.startFindPath();
 
             }
         });
@@ -180,6 +182,7 @@ public class DemoActivity extends Activity {
      * the updateMap() runs every second
      */
     private void updateMap() {
+        updateLocation(GlobalData.currentPosition);
         Date date = new Date();
         if (Math.abs(date.getTime() - GlobalData.IPS_UpdateTime.getTime()) >  6000)//if 6 seconds is passed
         {
@@ -194,7 +197,7 @@ public class DemoActivity extends Activity {
 
         location.setHandler(updatelog);
         location.DoLocalization();
-        updateLocation(GlobalData.currentPosition);
+        //updateLocation(GlobalData.currentPosition); //moved to the first line --peixiang at 08 Mar
 
         cleanScanbeaconlist();
 
@@ -256,9 +259,16 @@ public class DemoActivity extends Activity {
 
 
         if (isNavigation){//if the navigation is on
-            Beacon srcBeacon = getBestBeacon();//beacon with max rssi
+            Log.e("navigation", "navigation is running");
+            //Beacon srcBeacon = getBestBeacon();//beacon with max rssi, disable for debug purpose
+            Beacon srcBeacon = GlobalData.beaconlist.get("141");
+            //Log.e("srcBeacon", srcBeacon.ID);
             if(srcBeacon==null)
+            {
+                Log.e("navigation", "srcBeacon is null");
                 return;
+            }
+
 
             for (int i = 0 ; i < pathlines.size() ; i++){
                 pathlines.get(i).remove();
@@ -270,10 +280,10 @@ public class DemoActivity extends Activity {
 
             pathlines.clear();
 
-            Navigation nv = new Navigation();
-
-
-            List<Beacon> path = nv.startFindPath(srcBeacon, destinaton.postion);//the navigation algorithm
+            //Navigation nv = new Navigation(srcBeacon, destinaton.postion);
+            Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("147"));
+            Log.e("navigation", "constructor should be running");
+            List<Beacon> path = nv.startFindPath();//the navigation algorithm
             if (path.size() <= 1)
             {
                 isNavigation = false;

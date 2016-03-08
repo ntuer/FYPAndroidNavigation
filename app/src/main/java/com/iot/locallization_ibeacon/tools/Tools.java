@@ -94,6 +94,7 @@ public class Tools extends  Activity {
                     + " y:" + Tools.formatFloat(beacon.position.longitude)
                     + "\n max_rssi:" +beacon.max_rssi);
             GlobalData.beaconlist.put(beacon.ID,beacon);
+            Log.e("Put marker; ", "Beacon " + beacon.ID + " at " + beacon.position.latitude + ", " + beacon.position.longitude);
         }
 
     }

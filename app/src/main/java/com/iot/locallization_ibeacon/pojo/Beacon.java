@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,16 +18,24 @@ public class Beacon {
 	public String UUID;
 	public int TxPower;
 	public int max_rssi=-50;
-	public Integer floor=0;
+	public String building;
+	public Integer floor = 0;
 	public LatLng position ;
 	public long updateTime;
 	public int type=0;
 	public int pipeNum=0;
+	public float x = 0;
+	public float y = 0;
 	public MarkerOptions markerOptions = new MarkerOptions();
 	public HashMap<String,Beacon> neighbors = new HashMap();
 	public HashMap<String,Edge> edges = new HashMap();
 
-	public boolean isVisit = false ;
+	//navigation
+	public boolean isVisited = false ;
+	public float dijkstraDistance;
+	public float heuristicDistance;
+	public float distance;
+	public Beacon previousBeacon;
 
 	private final  int length = 3 ;
 	private int[] rssis = new int[length];
@@ -72,5 +81,21 @@ public class Beacon {
 		super.finalize();
 		this.neighbors = null;
 		this.edges = null;
+	}
+
+
+	//navigation methods
+	public void updateDistance()
+	{
+		this.distance = this.dijkstraDistance + this.heuristicDistance;
+	}
+
+	public void reset()
+	{
+		this.isVisited = false;
+		this.dijkstraDistance = 0;
+		this.heuristicDistance = 0;
+		this.distance = 0;
+		this.previousBeacon = null;
 	}
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class GlobalData
 {
 	public static String log;
-	public static  int curr_floor=4;
+	public static  int curr_floor = -4;
 	public static Handler loghandler ;
 	public static float[] hw={188,23f};//used for defining ground overlay position, dimensions in meters, the S4 building is 188 meters long and 23 meters wide
 	public static LatLng currentPosition = new LatLng(1.342518999,103.679474999);

@@ -139,7 +139,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             beacon.max_rssi  = Integer.parseInt(cursor.getString(4));
             beacon.position = new LatLng(Double.parseDouble(cursor.getString(5))
                     ,Double.parseDouble(cursor.getString(6)));
-            beacon.building = cursor.getString(7);
+            beacon.building = Integer.parseInt(cursor.getString(7));
             beacon.floor= Integer.parseInt(cursor.getString(8));
             beacon.type  = Integer.parseInt(cursor.getString(9));
             beacon.pipeNum  = Integer.parseInt(cursor.getString(10));
@@ -168,7 +168,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             beacon.max_rssi  = Integer.parseInt(cursor.getString(4));
             beacon.position = new LatLng(Double.parseDouble(cursor.getString(5))
                                         ,Double.parseDouble(cursor.getString(6)));
-            beacon.building = cursor.getString(7);
+            beacon.building = Integer.parseInt(cursor.getString(7));
             beacon.floor= Integer.parseInt(cursor.getString(8));
             beacon.type  = Integer.parseInt(cursor.getString(9));
             beacon.pipeNum  = Integer.parseInt(cursor.getString(10));

@@ -18,7 +18,7 @@ public class Beacon {
 	public String UUID;
 	public int TxPower;
 	public int max_rssi=-50;
-	public String building;
+	public int building;
 	public Integer floor = 0;
 	public LatLng position ;
 	public long updateTime;

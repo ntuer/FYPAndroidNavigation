@@ -28,8 +28,6 @@ public class Navigation {
 
     public Navigation(Beacon startBeacon, Beacon endBeacon){
         Log.e("Navigation constructor", "constructing...");
-        current = new ArrayList<>();
-        best = new ArrayList<>();
         this.startBeacon = startBeacon;
         this.endBeacon = endBeacon;
 
@@ -40,7 +38,7 @@ public class Navigation {
         Log.e("startFindPath" ,"strat ID = " +startBeacon.ID +" end ID = " + endBeacon.ID);
         Log.e("startLocation", startBeacon.building + ", " + startBeacon.floor + ", " + startBeacon.ID);
         Log.e("endLocation", endBeacon.building + ", " + endBeacon.floor + ", " + endBeacon.ID);
-        if(startBeacon.building.equals(endBeacon.building))
+        if(startBeacon.building == endBeacon.building)
         {
             if (startBeacon.floor == endBeacon.floor){  //same building, same floor
                 Log.e("================>", "start findSameFloorPath");
@@ -59,15 +57,13 @@ public class Navigation {
         else //different buildings
         {
             Log.e("================>", "start findDifferentBuildingPath");
-            //findDifferentBuildingPath();
-            return null;
+            Path bestPath = findDifferentBuildingPath(startBeacon, endBeacon);
+            bestPath.printPath();
+            Log.e("================>", "end findDifferentBuildingPath");
+            return bestPath.getBeaconList();
         }
 
     }
-
-    private List<Beacon> current ;
-    private List<Beacon> best ;
-    private int shortestLenth ;
 
     public Path  findSameFloorPath(Beacon startBeacon,Beacon endBeacon){//A star
         Log.e("sameFloor, startBeacon", startBeacon.ID);
@@ -226,13 +222,10 @@ public class Navigation {
         int startFloor = startBeacon.floor;
         int endFloor = endBeacon.floor;
 
-        ArrayList<Beacon> startFloorBeaconList = findSameFloorNode(startFloor);
-        ArrayList<Beacon> endFloorBeaconList = findSameFloorNode(endFloor);
-
         ArrayList<Beacon> startFloorElevators = findFloorElevatorNode(startFloor);
         ArrayList<Beacon> endFloorElevators = findFloorElevatorNode(endFloor);
 
-        //iterate through all elevators on thses two floors
+        //iterate through all elevators on these two floors
         for(Beacon startElevator : startFloorElevators)
         {
             for(Beacon endElevator : endFloorElevators)
@@ -259,6 +252,127 @@ public class Navigation {
             }
         }
         return bestPath;
+    }
+
+    public Path findDifferentBuildingPath(Beacon startBeacon, Beacon endBeacon)
+    {
+        Path bestPath = null;
+        float minPathLength = 0;
+        int counter = 0;
+
+        int startBuilding = startBeacon.building;
+        int endBuilding = endBeacon.building;
+
+        ArrayList<Beacon> startBuildingConnectors = findBuildingConnector(startBuilding);
+        ArrayList<Beacon> endBuildingConnectors = findBuildingConnector(endBuilding);
+
+        for(Beacon connector:startBuildingConnectors)
+        {
+            //find the best path in startBuilding
+            Path startBuildingPath = null;
+            if(connector.floor == startBeacon.floor)
+            {
+                startBuildingPath = findSameFloorPath(startBeacon, connector);
+            }
+            else
+            {
+                startBuildingPath = findDifferentFloorPath(startBeacon, connector);
+            }
+
+            //get the nearest connector in the endBuilding
+            Beacon endBuildingConnector = findNearestConnector(connector, endBuildingConnectors);
+
+            //find the best path in endBuilding
+            Path endBuildingPath = null;
+            if(endBuildingConnector.floor == endBeacon.floor)
+            {
+                endBuildingPath = findSameFloorPath(endBuildingConnector, endBeacon);
+            }
+            else
+            {
+                endBuildingPath = findDifferentFloorPath(endBuildingConnector, endBeacon);
+            }
+
+            if(counter == 0)
+            {
+                bestPath = combinePath(startBuildingPath, endBuildingPath);
+                minPathLength = bestPath.getLength();
+            }
+            else if(startBuildingPath.getLength() + endBuildingPath.getLength() < minPathLength)
+            {
+                bestPath = combinePath(startBuildingPath, endBuildingPath);
+                minPathLength = bestPath.getLength();
+            }
+            counter++;
+        }
+        return bestPath;
+    }
+
+    public Beacon findNearestConnector(Beacon beacon, ArrayList<Beacon> connectorList)
+    {
+        int counter = 0;
+        double minDistance = 0;
+        Beacon nearestConnector = null;
+        for(Beacon connector : connectorList)
+        {
+            if(connector.floor == beacon.floor)
+            {
+                double distance = getGPSDistance(beacon, connector);
+                if(counter == 0)
+                {
+                    minDistance = distance;
+                    nearestConnector = connector;
+                }
+                else if(distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestConnector = connector;
+                }
+                counter++;
+            }
+        }
+        return nearestConnector;
+    }
+
+    public double getGPSDistance(Beacon beaconA, Beacon beaconB)
+    {
+        int R = 6371000; //meters
+        double latARad = beaconA.position.latitude * Math.PI / 180;
+        double latBrad = beaconB.position.latitude * Math.PI / 180;
+        double latDiffRad = latBrad - latARad;
+        double lonDiffRad = (beaconB.position.longitude - beaconA.position.longitude) * Math.PI / 180;
+
+        double a = Math.sin(latDiffRad/2) * Math.sin(latDiffRad/2) +
+                    Math.cos(latARad) * Math.cos(latBrad) *
+                    Math.sin(lonDiffRad/2) * Math.sin(lonDiffRad/2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-1));
+        double distance = R * c;
+        Log.e("GPS distance", beaconA.ID + "-" + beaconB.ID + ": " + distance);
+        return distance;
+    }
+
+    public ArrayList<Beacon> findBuildingConnector(int buildingName)
+    {
+        Beacon mEndBeacon;
+        if(startBeacon.building == buildingName)
+        {
+            mEndBeacon = endBeacon;
+        }
+        else
+        {
+            mEndBeacon = startBeacon;
+        }
+        ArrayList<Beacon> connectors = new ArrayList<Beacon>();
+        Iterator<String> keytie =   GlobalData.beaconlist.keySet().iterator();
+        while(keytie.hasNext()){
+            String key = keytie.next();
+            Beacon beacon = GlobalData.beaconlist.get(key);
+            if (GlobalData.BeaconType.values()[beacon.type]==GlobalData.BeaconType.CONNECTOR && beacon.building == buildingName && beacon.pipeNum == mEndBeacon.building){
+                connectors.add(beacon);
+            }
+        }
+        return connectors;
     }
 
     public Path combinePath(Path firstPath, Path secondPath)

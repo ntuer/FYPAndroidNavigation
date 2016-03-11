@@ -70,18 +70,28 @@ public class Navigation {
     private int shortestLenth ;
 
     public Path  findSameFloorPath(Beacon startBeacon,Beacon endBeacon){//A star
+        Log.e("sameFloor, startBeacon", startBeacon.ID);
+        Log.e("sameFloor, endBeacon", endBeacon.ID);
+        if(startBeacon.equals(endBeacon)) {
+            Path bestPath = new Path();
+            bestPath.setLength(0);
+            bestPath.addPathDetails(startBeacon.ID);
+            bestPath.addBeacon(startBeacon);
+            return bestPath;
+        }
         Integer floor = startBeacon.floor;//the current floor
         sameFloorNodes = findSameFloorNode(floor);
-        initializeNodes(sameFloorNodes);
+        initializeNodes(startBeacon, sameFloorNodes);
         while(!endBeacon.isVisited)
         {
             Beacon currentBeacon = queue.remove();
             visit(currentBeacon);
         }
-        return getBestPath(endBeacon);
+        queue.clear();
+        return getBestPath(startBeacon, endBeacon);
     }
 
-    public Path getBestPath(Beacon endBeacon)
+    public Path getBestPath(Beacon startBeacon, Beacon endBeacon)
     {
         Path bestPath = new Path();
         bestPath.setLength(endBeacon.distance);
@@ -135,8 +145,11 @@ public class Navigation {
                     neighbor.updateDistance();
                     neighbor.previousBeacon = beacon;
                 }
-                unvisitedNeighborList.add(neighbor);
-                Log.e("unvisited neighbor", neighbor.ID);
+                if(!unvisitedNeighborList.contains(neighbor))
+                {
+                    unvisitedNeighborList.add(neighbor);
+                }
+                //Log.e("unvisited neighbor", neighbor.ID);
             }
         }
 
@@ -156,7 +169,7 @@ public class Navigation {
         for(Beacon neighbor : unvisitedNeighborList)
         {
             queue.add(neighbor);
-            Log.e("enqueued neighbor", neighbor.ID);
+            //Log.e("enqueued neighbor", neighbor.ID);
         }
     }
 
@@ -168,7 +181,7 @@ public class Navigation {
         return distance;
     }
 
-    public void initializeNodes(List<Beacon> sameFloorNodes)
+    public void initializeNodes(Beacon startBeacon, List<Beacon> sameFloorNodes)
     {
         for(Beacon beacon : sameFloorNodes)
         {
@@ -252,7 +265,7 @@ public class Navigation {
     {
         Path newPath = new Path();
         newPath.setLength(firstPath.getLength() + secondPath.getLength());
-        newPath.addPathDetails(firstPath.getPathDetails() + secondPath.getPathDetails());
+        newPath.addPathDetails(firstPath.getPathDetails() + "->" + secondPath.getPathDetails());
         newPath.getBeaconList().addAll(firstPath.getBeaconList());
         newPath.getBeaconList().addAll(secondPath.getBeaconList());
         newPath.setProcessTime(firstPath.getProcessTime() + secondPath.getProcessTime());

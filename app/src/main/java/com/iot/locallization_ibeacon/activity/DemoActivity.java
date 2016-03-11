@@ -92,13 +92,19 @@ public class DemoActivity extends Activity {
     private void initUI(){
         Spinner spiner = (Spinner)findViewById(R.id.spinner);
 
-        Destionation d1 = new Destionation("Chair of EEE", GlobalData.beaconlist.get("1128"));
-        Destionation d2 = new Destionation("Men Toilet", GlobalData.beaconlist.get("1121"));
-        Destionation d3 = new Destionation("Office of Prof Mo Yilin", GlobalData.beaconlist.get("114"));
-        Destionation d4 = new Destionation("IOT Lab", GlobalData.beaconlist.get("1412"));
-        Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("1440"));
-        Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("1114"));
+//        Destionation d1 = new Destionation("Chair of EEE", GlobalData.beaconlist.get("1128"));
+//        Destionation d2 = new Destionation("Men Toilet", GlobalData.beaconlist.get("1121"));
+//        Destionation d3 = new Destionation("Office of Prof Mo Yilin", GlobalData.beaconlist.get("114"));
+//        Destionation d4 = new Destionation("IOT Lab", GlobalData.beaconlist.get("1412"));
+//        Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("1440"));
+//        Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("1114"));
 
+        Destionation d1 = new Destionation("Chair of EEE", GlobalData.beaconlist.get("147"));
+        Destionation d2 = new Destionation("Men Toilet", GlobalData.beaconlist.get("149"));
+        Destionation d3 = new Destionation("Office of Prof Mo Yilin", GlobalData.beaconlist.get("118"));
+        Destionation d4 = new Destionation("IOT Lab", GlobalData.beaconlist.get("119"));
+        Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("146"));
+        Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("144"));
 
         final List<Destionation> destionList = new ArrayList<Destionation>();
         destionList.add(d1);
@@ -280,8 +286,8 @@ public class DemoActivity extends Activity {
 
             pathlines.clear();
 
-            //Navigation nv = new Navigation(srcBeacon, destinaton.postion);
-            Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("117"));
+            Navigation nv = new Navigation(srcBeacon, destinaton.postion);
+            //Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("117"));
             Log.e("navigation", "constructor should be running");
             List<Beacon> path = nv.startFindPath();//the navigation algorithm
             if (path.size() <= 1)

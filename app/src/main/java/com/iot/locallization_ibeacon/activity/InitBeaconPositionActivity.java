@@ -141,10 +141,9 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
         RadioButton RB_AddLine = (RadioButton)findViewById(R.id.RB_AddLine);
         RadioButton RB_Delete = (RadioButton)findViewById(R.id.RB_Delete);
 
-        Button BT_Indoor = (Button)findViewById(R.id.BT_Indoor);
-        Button BT_Outdoor = (Button)findViewById(R.id.BT_Outdoor);
-        Button BT_Stairs = (Button)findViewById(R.id.BT_Stairs);
+        Button BT_Normal = (Button)findViewById(R.id.BT_Normal);
         Button BT_Elevator = (Button)findViewById(R.id.BT_Elevator);
+        Button BT_Connector = (Button)findViewById(R.id.BT_Connector);
         Button BT_SetPipe = (Button)findViewById(R.id.BT_SetPipe);
         Button BT_PipePluse = (Button)findViewById(R.id.BT_PipePluse);
         Button BT_PipeSub = (Button)findViewById(R.id.BT_PipeSub);
@@ -176,7 +175,6 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
 
                     Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());//get the beacon being edited
                     switch (GlobalData.BeaconType.values()[beacon.type]){
-                        case  STAIRS:
                         case  ELEVATOR://if the beacon is in ELEVATOR type, update the pipe number and save it to the database
                             TextView num = (TextView)findViewById(R.id.TV_PipeNum);
                             beacon.pipeNum = Integer.parseInt(num.getText().toString());
@@ -188,34 +186,14 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
                 }
             }
         });
-        BT_Indoor.setOnClickListener(new View.OnClickListener() {
+        BT_Normal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (InitBeaconPositionActivity.this.marker!=null)
                 {
                     Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());
-                    beacon.type = GlobalData.BeaconType.INDOOR.ordinal();
+                    beacon.type = GlobalData.BeaconType.NORMAL.ordinal();
                     Tools.updateBeacon(beacon,InitBeaconPositionActivity.this);
-                }
-            }
-        });
-        BT_Outdoor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (InitBeaconPositionActivity.this.marker!=null) {
-                    Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());
-                    beacon.type = GlobalData.BeaconType.OUTDOOR.ordinal();
-                    Tools.updateBeacon(beacon, InitBeaconPositionActivity.this);
-                }
-            }
-        });
-        BT_Stairs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (InitBeaconPositionActivity.this.marker!=null) {
-                    Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());
-                    beacon.type = GlobalData.BeaconType.STAIRS.ordinal();
-                    Tools.updateBeacon(beacon, InitBeaconPositionActivity.this);
                 }
             }
         });
@@ -225,6 +203,16 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
                 if (InitBeaconPositionActivity.this.marker!=null) {
                     Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());
                     beacon.type = GlobalData.BeaconType.ELEVATOR.ordinal();
+                    Tools.updateBeacon(beacon, InitBeaconPositionActivity.this);
+                }
+            }
+        });
+        BT_Connector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (InitBeaconPositionActivity.this.marker!=null) {
+                    Beacon beacon = GlobalData.beaconlist.get(InitBeaconPositionActivity.this.marker.getTitle());
+                    beacon.type = GlobalData.BeaconType.CONNECTOR.ordinal();
                     Tools.updateBeacon(beacon, InitBeaconPositionActivity.this);
                 }
             }

@@ -261,7 +261,7 @@ public class DemoActivity extends Activity {
         if (isNavigation){//if the navigation is on
             Log.e("navigation", "navigation is running");
             //Beacon srcBeacon = getBestBeacon();//beacon with max rssi, disable for debug purpose
-            Beacon srcBeacon = GlobalData.beaconlist.get("141");
+            Beacon srcBeacon = GlobalData.beaconlist.get("142");
             //Log.e("srcBeacon", srcBeacon.ID);
             if(srcBeacon==null)
             {
@@ -281,7 +281,7 @@ public class DemoActivity extends Activity {
             pathlines.clear();
 
             //Navigation nv = new Navigation(srcBeacon, destinaton.postion);
-            Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("147"));
+            Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("117"));
             Log.e("navigation", "constructor should be running");
             List<Beacon> path = nv.startFindPath();//the navigation algorithm
             if (path.size() <= 1)

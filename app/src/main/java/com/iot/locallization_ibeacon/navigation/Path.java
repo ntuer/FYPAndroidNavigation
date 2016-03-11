@@ -18,7 +18,7 @@ public class Path {
 		beaconList = new ArrayList<Beacon>();
 	}
 
-	public double getLength() {
+	public float getLength() {
 		return length;
 	}
 
@@ -59,6 +59,7 @@ public class Path {
 	{
 		return this.beaconList;
 	}
+
 	
 	
 }

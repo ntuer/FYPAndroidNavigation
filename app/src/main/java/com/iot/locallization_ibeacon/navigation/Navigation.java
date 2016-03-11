@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-/**
- * Created by zhujianjie on 2015/9/21.
- */
+
 public class Navigation {
     public final float HEURISTIC_COEFFICIENT = 0;
     public final float DIJKSTRA_COEFFICIENT = 1;
@@ -30,7 +28,6 @@ public class Navigation {
 
     public Navigation(Beacon startBeacon, Beacon endBeacon){
         Log.e("Navigation constructor", "constructing...");
-        findAllFloorElevatorNode();
         current = new ArrayList<>();
         best = new ArrayList<>();
         this.startBeacon = startBeacon;
@@ -53,9 +50,10 @@ public class Navigation {
 
             }else{      //same building, different floors
                 Log.e("================>", "start findDifferentFloorPath");
-                best = findDifferentFloorPath(startBeacon, endBeacon);
+                Path bestPath = findDifferentFloorPath(startBeacon, endBeacon);
+                bestPath.printPath();
                 Log.e("================>", "end findDifferentFloorPath");
-                return null;
+                return bestPath.getBeaconList();
             }
         }
         else //different buildings
@@ -207,69 +205,72 @@ public class Navigation {
     }
 
 
-    public List<Beacon>  findDifferentFloorPath(Beacon startBeacon,Beacon endBeacon){
+    public Path findDifferentFloorPath(Beacon startBeacon,Beacon endBeacon){
+        Path bestPath = null;
+        int counter = 0;
+        float minPathLength = 0;
 
-        List<Beacon> TempbestList=new ArrayList<>();
-        int tempshortestlength = 100000;
-        List<Beacon> bestList=new ArrayList<>();
-        int pathLength = 0;
+        int startFloor = startBeacon.floor;
+        int endFloor = endBeacon.floor;
 
-        for (int i =0; i < elevators.size() ;i++){
-            Beacon beacon = elevators.get(i);
-            if (beacon.floor == startBeacon.floor){//find the elevator beacon that is on the same floor as the startBeacon
-                bestList.clear();
-                pathLength=0;
+        ArrayList<Beacon> startFloorBeaconList = findSameFloorNode(startFloor);
+        ArrayList<Beacon> endFloorBeaconList = findSameFloorNode(endFloor);
 
-                initParameter();
+        ArrayList<Beacon> startFloorElevators = findFloorElevatorNode(startFloor);
+        ArrayList<Beacon> endFloorElevators = findFloorElevatorNode(endFloor);
 
-                findSameFloorPath(startBeacon,beacon);//find the best path from the startBeacon to the elevator beacon on the same floor
-                pathLength += shortestLenth;
-                bestList.addAll(best);
+        //iterate through all elevators on thses two floors
+        for(Beacon startElevator : startFloorElevators)
+        {
+            for(Beacon endElevator : endFloorElevators)
+            {
+                if(startElevator.pipeNum == endElevator.pipeNum)
+                {
+                    Path startFloorPath = findSameFloorPath(startBeacon, startElevator);
+                    Path endFloorPath = findSameFloorPath(endElevator, endBeacon);
 
-                for (int j =0; j < elevators.size() ;j++) {
-                    Beacon beacon2 = elevators.get(j);
-                    if(beacon2.pipeNum == beacon.pipeNum && beacon2.floor == endBeacon.floor){//if the elevator beacon is on the same elevator as the first elevator beacon and the floor is on the end floor
+                    float totalPathLength = startFloorPath.getLength() + endFloorPath.getLength();
 
-                        initParameter();
-                        findSameFloorPath(beacon2,endBeacon);
-                        pathLength += shortestLenth;
-                        bestList.addAll(best);
-
-                        if (pathLength < tempshortestlength){
-                            tempshortestlength = pathLength;
-                            TempbestList.clear();
-                            TempbestList.addAll(bestList);
-                        }
-
-                        break;
+                    if(counter == 0)
+                    {
+                        bestPath = combinePath(startFloorPath, endFloorPath);
+                        minPathLength = bestPath.getLength();
                     }
+                    else if(startFloorPath.getLength() + endFloorPath.getLength() < minPathLength)  //if this combined path is shorter
+                    {
+                        bestPath = combinePath(startFloorPath, endFloorPath);
+                        minPathLength = bestPath.getLength();
+                    }
+                    counter++;
                 }
-
-
             }
-
         }
-
-        return  TempbestList;
+        return bestPath;
     }
 
-    public void initParameter(){
-        current.clear();
-        best.clear();
-        shortestLenth = 10000000;
+    public Path combinePath(Path firstPath, Path secondPath)
+    {
+        Path newPath = new Path();
+        newPath.setLength(firstPath.getLength() + secondPath.getLength());
+        newPath.addPathDetails(firstPath.getPathDetails() + secondPath.getPathDetails());
+        newPath.getBeaconList().addAll(firstPath.getBeaconList());
+        newPath.getBeaconList().addAll(secondPath.getBeaconList());
+        newPath.setProcessTime(firstPath.getProcessTime() + secondPath.getProcessTime());
+
+        return newPath;
     }
 
-    List<Beacon> elevators = new ArrayList<Beacon>();
-    public  void findAllFloorElevatorNode( ){
+    public  ArrayList<Beacon> findFloorElevatorNode(int floor ){
+        ArrayList<Beacon> elevators = new ArrayList<Beacon>();
         Iterator<String> keytie =   GlobalData.beaconlist.keySet().iterator();
         while(keytie.hasNext()){
             String key = keytie.next();
             Beacon beacon = GlobalData.beaconlist.get(key);
-            if (GlobalData.BeaconType.values()[beacon.type]==GlobalData.BeaconType.ELEVATOR){
+            if (GlobalData.BeaconType.values()[beacon.type]==GlobalData.BeaconType.ELEVATOR && beacon.floor == floor){
                 elevators.add(beacon);
             }
         }
-
+        return elevators;
     }
 
 

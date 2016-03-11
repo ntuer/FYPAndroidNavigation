@@ -75,8 +75,8 @@ public class Navigation {
             bestPath.addBeacon(startBeacon);
             return bestPath;
         }
-        Integer floor = startBeacon.floor;//the current floor
-        sameFloorNodes = findSameFloorNode(floor);
+        //Integer floor = startBeacon.floor;//the current floor
+        sameFloorNodes = findSameFloorNode(startBeacon);
         initializeNodes(startBeacon, sameFloorNodes);
         while(!endBeacon.isVisited)
         {
@@ -198,13 +198,15 @@ public class Navigation {
         }
     }
 
-    public  ArrayList<Beacon> findSameFloorNode(int floor){
+    public  ArrayList<Beacon> findSameFloorNode(Beacon mBeacon){
+        int building = mBeacon.building;
+        int floor = mBeacon.floor;
         ArrayList<Beacon> beaconlist = new ArrayList<Beacon>();
         Iterator<String> keytie =   GlobalData.beaconlist.keySet().iterator();
         while(keytie.hasNext()){
             String key = keytie.next();
             Beacon beacon = GlobalData.beaconlist.get(key);
-            if (beacon.floor == floor)
+            if (beacon.building == building && beacon.floor == floor)
             {
                 beaconlist.add(beacon);
             }
@@ -219,11 +221,11 @@ public class Navigation {
         int counter = 0;
         float minPathLength = 0;
 
-        int startFloor = startBeacon.floor;
-        int endFloor = endBeacon.floor;
+        //int startFloor = startBeacon.floor;
+        //int endFloor = endBeacon.floor;
 
-        ArrayList<Beacon> startFloorElevators = findFloorElevatorNode(startFloor);
-        ArrayList<Beacon> endFloorElevators = findFloorElevatorNode(endFloor);
+        ArrayList<Beacon> startFloorElevators = findFloorElevatorNode(startBeacon);
+        ArrayList<Beacon> endFloorElevators = findFloorElevatorNode(endBeacon);
 
         //iterate through all elevators on these two floors
         for(Beacon startElevator : startFloorElevators)
@@ -346,7 +348,7 @@ public class Navigation {
                     Math.cos(latARad) * Math.cos(latBrad) *
                     Math.sin(lonDiffRad/2) * Math.sin(lonDiffRad/2);
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-1));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         double distance = R * c;
         Log.e("GPS distance", beaconA.ID + "-" + beaconB.ID + ": " + distance);
         return distance;
@@ -387,13 +389,15 @@ public class Navigation {
         return newPath;
     }
 
-    public  ArrayList<Beacon> findFloorElevatorNode(int floor ){
+    public  ArrayList<Beacon> findFloorElevatorNode(Beacon mBeacon ){
+        int building = mBeacon.building;
+        int floor = mBeacon.floor;
         ArrayList<Beacon> elevators = new ArrayList<Beacon>();
         Iterator<String> keytie =   GlobalData.beaconlist.keySet().iterator();
         while(keytie.hasNext()){
             String key = keytie.next();
             Beacon beacon = GlobalData.beaconlist.get(key);
-            if (GlobalData.BeaconType.values()[beacon.type]==GlobalData.BeaconType.ELEVATOR && beacon.floor == floor){
+            if (beacon.building == building && GlobalData.BeaconType.values()[beacon.type]==GlobalData.BeaconType.ELEVATOR && beacon.floor == floor){
                 elevators.add(beacon);
             }
         }

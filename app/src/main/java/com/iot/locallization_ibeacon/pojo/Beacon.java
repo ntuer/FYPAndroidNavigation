@@ -19,7 +19,7 @@ public class Beacon {
 	public int TxPower;
 	public int max_rssi=-50;
 	public int building;
-	public Integer floor = 0;
+	public int floor = 0;
 	public LatLng position ;
 	public long updateTime;
 	public int type=0;//0: normal, 1:elevator, 2: connector

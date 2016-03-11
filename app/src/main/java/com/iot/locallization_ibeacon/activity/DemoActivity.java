@@ -103,8 +103,8 @@ public class DemoActivity extends Activity {
         Destionation d2 = new Destionation("Men Toilet", GlobalData.beaconlist.get("149"));
         Destionation d3 = new Destionation("Office of Prof Mo Yilin", GlobalData.beaconlist.get("118"));
         Destionation d4 = new Destionation("IOT Lab", GlobalData.beaconlist.get("119"));
-        Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("146"));
-        Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("144"));
+        Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("211"));
+        Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("217"));
 
         final List<Destionation> destionList = new ArrayList<Destionation>();
         destionList.add(d1);

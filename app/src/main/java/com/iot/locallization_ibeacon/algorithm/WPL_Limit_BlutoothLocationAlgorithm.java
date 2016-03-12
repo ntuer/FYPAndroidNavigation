@@ -30,14 +30,15 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 	}
 
 	@Override
-	public void DoLocalization( )//calculate the current position and store result to GlobalData.currentPosition
+	public void DoLocalization( )//calculate the current position and store result to GlobalData.currentPosition, also store at most 2 nearest beacons into
+								//GlobalData.calculateBeacon
 	{
 		Double rssi_max=-40.0;
 		Double rssi_min=-150.0;
 		Double sumDef=0.0;
 		double x= 0;
 		double y =0;
-		List<Beacon> sensorList = SortWifiSignal();
+		List<Beacon> sensorList = SortWifiSignal();//sort a list of scanned beacons
 
 
 		/*if (sensorList.size()>0 && GlobalData.calculateBeacons.size()>0){
@@ -62,29 +63,34 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 
 		}*/
 
+		//if the nearest beacon is en ELEVATOR type, use this position directly
 		if (sensorList.size()>0
 				&& (sensorList.get(0).type == GlobalData.BeaconType.ELEVATOR.ordinal())){
 			GlobalData.currentPosition = sensorList.get(0).position;
 			GlobalData.calculateBeacons.clear();
-			GlobalData.calculateBeacons.add(sensorList.get(0));//add the beacon with max rssi to the list
+			GlobalData.calculateBeacons.add(sensorList.get(0));//only add this beacon to the list
 			return ;
 		}
 
 
-		cleanScanbeaconlist(sensorList);
+		cleanScanbeaconlist(sensorList);//remove all ELEVATOR type beacon
 
 
 		GlobalData.calculateBeacons.clear();
-		if (sensorList.size()>=2){
+		if (sensorList.size()>=2){	//if scanned at least 2 beacons, add the nearest two
 			GlobalData.calculateBeacons.add(sensorList.get(0));
 			GlobalData.calculateBeacons.add(sensorList.get(1));
-		}else if (sensorList.size() > 0 ){
+		}else if (sensorList.size() > 0 ){	//if only scanned one beacon, add only this to the list
 			GlobalData.calculateBeacons.add(sensorList.get(0));
 		}
 
+		for(int i = 0; i < GlobalData.calculateBeacons.size(); i++)
+		{
+			Log.e("calculateBeacon", GlobalData.calculateBeacons.get(i).ID);
+		}
 
 
-		int len=0;
+		int len=0;	//leg is either 0, 1 or 2
 		if (length>sensorList.size())
 		{
 			len=sensorList.size();
@@ -117,6 +123,8 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 		y = y / sumDef;
 		//Log.e("xxxxxxxxx","x = "+x+" y = "+y);
 		GlobalData.currentPosition = new LatLng(x,y);
+
+		Log.e("Current Position", GlobalData.currentPosition.latitude + ", " + GlobalData.currentPosition.longitude);
 
 		/*Date time = new Date();
 		for (int i = 0 ; i< sensorList.size()  ;i++)

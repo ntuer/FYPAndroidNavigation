@@ -18,7 +18,7 @@ public class BLEScanCallBack implements BluetoothAdapter.LeScanCallback {
 
 
         Beacon beacon = Tools.dealScan(device, rssi, scanRecord);
-        Log.e("Scanned beacon:", beacon.ID);
+        Log.e("Scanned beacon:", "ID: " + beacon.ID + ", rssi: " + beacon.rssi);
         BeaconConsumer.consumeBeacon(beacon);
     }
 }

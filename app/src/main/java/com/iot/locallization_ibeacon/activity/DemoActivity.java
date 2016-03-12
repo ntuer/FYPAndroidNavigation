@@ -188,7 +188,7 @@ public class DemoActivity extends Activity {
      * the updateMap() runs every second
      */
     private void updateMap() {
-        updateLocation(GlobalData.currentPosition);
+        //updateLocation(GlobalData.currentPosition);
         Date date = new Date();
         if (Math.abs(date.getTime() - GlobalData.IPS_UpdateTime.getTime()) >  6000)//if 6 seconds is passed
         {
@@ -203,7 +203,7 @@ public class DemoActivity extends Activity {
 
         location.setHandler(updatelog);
         location.DoLocalization();
-        //updateLocation(GlobalData.currentPosition); //moved to the first line --peixiang at 08 Mar
+        updateLocation(GlobalData.currentPosition); //moved to the first line --peixiang at 08 Mar
 
         cleanScanbeaconlist();
 

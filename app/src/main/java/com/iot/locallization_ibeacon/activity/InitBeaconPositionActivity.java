@@ -1,6 +1,5 @@
 package com.iot.locallization_ibeacon.activity;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -35,17 +33,12 @@ import com.iot.locallization_ibeacon.pojo.Edge;
 import com.iot.locallization_ibeacon.pojo.GlobalData;
 import com.iot.locallization_ibeacon.tools.Tools;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TooManyListenersException;
 
 
 public class InitBeaconPositionActivity extends ActionBarActivity {
@@ -54,13 +47,13 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
 
 
     private Hashtable<String,Beacon> markerList = new Hashtable<String,Beacon>();
-    public int floor=4;
+    public int floor=-4;
     private Marker marker;
     private int markID=0;
     private  Circle circle;
     private TimerTask task;
     private boolean addEdgeFlag =false;
-    private boolean curr_or_max=true;
+    private boolean maxSelected =true;
     private GroundOverlay image=null;
     private final Timer timer = new Timer();
 
@@ -260,7 +253,7 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
 
 
                 TextView log = (TextView) findViewById(R.id.TV_Log1);
-                if (marker != null && curr_or_max == false) {//current is selected
+                if (marker != null && maxSelected == false) {//current is selected
                     //把选定的beacon更新其信号最强值
 
                     Beacon sensor = GlobalData.beaconlist.get(marker.getTitle());
@@ -275,7 +268,7 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
                     Tools.updateBeacon(sensor,InitBeaconPositionActivity.this);
 
                 }
-                else if (marker != null && curr_or_max == true) {//max is selected
+                else if (marker != null && maxSelected == true) {//max is selected
                     //把选定的beacon更新为信号最强的beacon
                     Beacon sensor = GlobalData.beaconlist.get(marker.getTitle());
 
@@ -324,7 +317,7 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                 {
-                    curr_or_max = false;
+                    maxSelected = false;
                 }
             }
         });
@@ -333,7 +326,7 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                 {
-                    curr_or_max = true;
+                    maxSelected = true;
                 }
             }
         });
@@ -395,11 +388,10 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
                 switch (edge_action) {//different modes when clicking the markers
                     case NORMAL:
                         InitBeaconPositionActivity.this.marker = marker;
-                        marker.setSnippet("nabors: " +GlobalData.beaconlist.get(marker.getTitle()).neighbors.size()
-                                +" edges: "+GlobalData.beaconlist.get(marker.getTitle()).edges.size()
-                                + "type: " + +GlobalData.beaconlist.get(marker.getTitle()).type
+                        marker.setSnippet("type: " + +GlobalData.beaconlist.get(marker.getTitle()).type
                                 + "pipeNum: " + +GlobalData.beaconlist.get(marker.getTitle()).pipeNum
-                                + "\n max_rssi:" + markerList.get(marker.getTitle()).max_rssi);
+                                + "x:" + markerList.get(marker.getTitle()).x
+                                + "y:" + markerList.get(marker.getTitle()).y);
                        /* marker.setSnippet("nabors count = " +GlobalData.beaconlist.get(marker.getTitle()).neighbors.size()
                                 +" edges  count = "+GlobalData.beaconlist.get(marker.getTitle()).edges.size()
                                 + "type = " + +GlobalData.beaconlist.get(marker.getTitle()).type);*/
@@ -615,16 +607,16 @@ public class InitBeaconPositionActivity extends ActionBarActivity {
         BitmapDescriptor img =null;
         switch(floor)
         {
-            case 1:
+            case -1:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k11);
                 break;
-            case 2:
+            case -2:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k22);
                 break;
-            case 3:
+            case -3:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k33);
                 break;
-            case 4:
+            case -4:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k44);
                 break;
             default:

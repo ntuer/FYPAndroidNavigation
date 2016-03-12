@@ -18,11 +18,11 @@ public class Beacon {
 	public String UUID;
 	public int TxPower;
 	public int max_rssi=-50;
-	public String building;
-	public Integer floor = 0;
+	public int building;
+	public int floor = 0;
 	public LatLng position ;
 	public long updateTime;
-	public int type=0;
+	public int type=0;//0: normal, 1:elevator, 2: connector
 	public int pipeNum=0;
 	public float x = 0;
 	public float y = 0;

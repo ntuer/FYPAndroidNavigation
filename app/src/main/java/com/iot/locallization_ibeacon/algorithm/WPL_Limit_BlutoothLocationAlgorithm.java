@@ -63,8 +63,7 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 		}*/
 
 		if (sensorList.size()>0
-				&& (sensorList.get(0).type == GlobalData.BeaconType.INDOOR.ordinal()
-		|| sensorList.get(0).type == GlobalData.BeaconType.STAIRS.ordinal())){
+				&& (sensorList.get(0).type == GlobalData.BeaconType.ELEVATOR.ordinal())){
 			GlobalData.currentPosition = sensorList.get(0).position;
 			GlobalData.calculateBeacons.clear();
 			GlobalData.calculateBeacons.add(sensorList.get(0));//add the beacon with max rssi to the list
@@ -134,8 +133,7 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 		for (int index = 0; index < sensorList.size() ; index++) {
 			Beacon beacon = sensorList.get(index);
 			switch (GlobalData.BeaconType.values()[beacon.type]){
-				case  STAIRS:
-				case  INDOOR:
+				case  ELEVATOR:
 					removeList.add(beacon);
 					break;
 				default:

@@ -19,7 +19,7 @@ public class GlobalData
 	public static float[] hw={188,23f};//used for defining ground overlay position, dimensions in meters, the S4 building is 188 meters long and 23 meters wide
 	public static LatLng currentPosition = new LatLng(1.342518999,103.679474999);
 	public static Date IPS_UpdateTime = new Date();
-	public static enum BeaconType {OUTDOOR,INDOOR,STAIRS,ELEVATOR};
+	public static enum BeaconType {NORMAL, ELEVATOR, CONNECTOR};
 	public static enum EdgeAction {ADD_LINE,DELETE_LINE,NORMAL};
 	public static LatLng ancer = new LatLng(1.342518999,103.679474999);//the gps position of the anchor point (local position of (0,0))
 	private static File sd = Environment.getExternalStorageDirectory();

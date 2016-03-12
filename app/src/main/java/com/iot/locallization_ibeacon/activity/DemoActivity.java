@@ -266,13 +266,15 @@ public class DemoActivity extends Activity {
 
         if (isNavigation){//if the navigation is on
             Log.e("navigation", "navigation is running");
-            //Beacon srcBeacon = getBestBeacon();//beacon with max rssi, disable for debug purpose
-            Beacon srcBeacon = GlobalData.beaconlist.get("142");
-            //Log.e("srcBeacon", srcBeacon.ID);
-            if(srcBeacon==null)
+            Beacon srcBeacon = getBestBeacon();//beacon with max rssi, disable for debug purpose
+            //Beacon srcBeacon = GlobalData.beaconlist.get("142");
+            if(srcBeacon == null)
             {
-                Log.e("navigation", "srcBeacon is null");
-                return;
+                srcBeacon = GlobalData.beaconlist.get("142");
+                Log.e("srcBeacon", "No beacon found");
+            }
+            else{
+                Log.e("srcBeacon", srcBeacon.ID);
             }
 
 

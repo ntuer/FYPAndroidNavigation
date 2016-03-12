@@ -30,7 +30,7 @@ public class WPL_Limit_BlutoothLocationAlgorithm extends BluetoothLocalizationAl
 	}
 
 	@Override
-	public void DoLocalization( )
+	public void DoLocalization( )//calculate the current position and store result to GlobalData.currentPosition
 	{
 		Double rssi_max=-40.0;
 		Double rssi_min=-150.0;

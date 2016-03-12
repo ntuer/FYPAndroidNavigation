@@ -24,8 +24,8 @@ public class BeaconConsumer
         {
 
 
-            Beacon sensor = GlobalData.beaconlist.get(beacon.ID);
-            sensor.setRssi(beacon.rssi);
+            Beacon sensor = GlobalData.beaconlist.get(beacon.ID);//get beacon in the database
+            sensor.setRssi(beacon.rssi);//set current rssi
             sensor.updateTime = new Date().getTime();
 
             //类似心跳，判断是否还在beacon范围，如果超出beaco范围，6s后切换到GPS定位
@@ -36,7 +36,7 @@ public class BeaconConsumer
                 GlobalData.IPS_UpdateTime = new Date(); //更新扫描到beacon的时间
             }
 
-            //判断是否楼成切换
+            //update floor changes
             if (GlobalData.curr_floor != sensor.floor && (sensor.rssi - sensor.max_rssi) > -27 )
             {
                 GlobalData.curr_floor = sensor.floor;

@@ -163,16 +163,16 @@ public class DemoActivity extends Activity {
         Log.e("changeBuildingMap", " floor = " + GlobalData.curr_floor);
         switch(GlobalData.curr_floor)
         {
-            case 1:
+            case -1:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k11);
                 break;
-            case 2:
+            case -2:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k22);
                 break;
-            case 3:
+            case -3:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k33);
                 break;
-            case 4:
+            case -4:
                 img=BitmapDescriptorFactory.fromResource(R.drawable.k44);
                 break;
             default:

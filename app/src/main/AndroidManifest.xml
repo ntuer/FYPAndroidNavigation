@@ -32,6 +32,7 @@
 
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,10 +42,12 @@
         </activity>
         <activity
             android:name=".activity.InitBeaconPositionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_get__lan_lng_" >
         </activity>
         <activity
             android:name=".activity.DemoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_demo" >
         </activity>
 

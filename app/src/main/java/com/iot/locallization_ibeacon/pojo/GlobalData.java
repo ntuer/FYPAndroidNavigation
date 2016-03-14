@@ -29,6 +29,6 @@ public class GlobalData
 	public static Hashtable<String, Beacon> scanbeaconlist = new Hashtable();
 	public static List<Edge> edges = new ArrayList<>();
 	public static List<Beacon> calculateBeacons =  new ArrayList<>();
-	public static Beacon previousBeacon;
+	public static Beacon previousBeacon = GlobalData.beaconlist.get("1411");
 
 }

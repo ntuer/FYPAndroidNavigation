@@ -284,6 +284,10 @@ public class Navigation {
             //get the nearest connector in the endBuilding
             Beacon endBuildingConnector = findNearestConnector(connector, endBuildingConnectors);
 
+            if(endBuildingConnector == null)
+            {
+                continue;
+            }
             //find the best path in endBuilding
             Path endBuildingPath = null;
             if(endBuildingConnector.floor == endBeacon.floor)

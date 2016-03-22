@@ -98,7 +98,7 @@ public class DemoActivity extends Activity {
         Destionation d4 = new Destionation("IOT Lab", GlobalData.beaconlist.get("1412"));
         Destionation d5= new Destionation("Robotic Lab", GlobalData.beaconlist.get("1440"));
         Destionation d6= new Destionation("Office of Prof Costas Spanos", GlobalData.beaconlist.get("1114"));
-
+        Destionation d7= new Destionation("S2 Building", GlobalData.beaconlist.get("243"));
 //        Destionation d1 = new Destionation("Chair of EEE", GlobalData.beaconlist.get("1431"));
 //        Destionation d2 = new Destionation("Men Toilet", GlobalData.beaconlist.get("1448"));
 //        Destionation d3 = new Destionation("Office of Prof Mo Yilin", GlobalData.beaconlist.get("1433"));
@@ -113,6 +113,7 @@ public class DemoActivity extends Activity {
         destionList.add(d4);
         destionList.add(d5);
         destionList.add(d6);
+        destionList.add(d7);
 
         destinaton = destionList.get(0);
 
@@ -291,6 +292,8 @@ public class DemoActivity extends Activity {
 
             pathlines.clear();
 
+            //temporary srcBeacon
+            //srcBeacon = GlobalData.beaconlist.get("1412");
             Navigation nv = new Navigation(srcBeacon, destinaton.postion);
             //Navigation nv = new Navigation(srcBeacon, GlobalData.beaconlist.get("117"));
             Log.e("navigation", "constructor should be running");
